@@ -1,12 +1,51 @@
-<div class="bg-primary position-relative">
-  <div class="overlay-gradient"></div>
-  <div class="container position-relative">
-  	<div class="row py-5">
-    	<div class="col">
-        <h1 class="display-1">QR Code Generator</h1>
-        <p>This is an example of header.<br>Place here your contents, or remove the file <code>/template/<span class="bg-danger text-white px-1">header.php</span></code>.</p>
-        <p><a href="#" class="btn btn-primary btn-lg shadow" role="button">Learn more &raquo;</a></p>
+<div class="header">
+  <div class="header__section container-fluid">
+    <div class="nav">
+      <a href=""><img src="<?php echo $relative; ?>svg/logo.svg" alt="" /></a>
     </div>
+    <div class="row">
+      <div class="col-sm -12 col-xl-5">
+        <div class="header__title">QR Code Generator</div>
+        <div class="header__describe">
+          Manage all of your codes in one place using our free QR code
+          generator and scanner app
+        </div>
+        <div class="header__button">
+          <a href="">
+            <img src="<?php echo $relative; ?>svg/buttons/app_store.svg" alt="" />
+          </a>
+          <a href="">
+            <img src="<?php echo $relative; ?>svg/buttons/google_play.svg" alt="" />
+          </a>
+        </div>
+        <div class="header__button__mobile container-fluid text-center">
+          <div class="row">
+            <div class="col-6">
+              <a href="">
+                <img src="<?php echo $relative; ?>svg/buttons/app_store.svg" alt="" />
+              </a>
+            </div>
+            <div class="col-6">
+              <a href="">
+                <img src="<?php echo $relative; ?>svg/buttons/google_play.svg" alt="" />
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="header__link">
+          <a href="">
+            <img src="<?php echo $relative; ?>svg/buttons/down_now.svg" alt="" />
+          </a>
+        </div>
+      </div>
+      <div class="col-xl-1"></div>
+      <div class="col-sm -12 col-xl-6 text-right header__phone">
+        <img src="<?php echo $relative; ?>svg/phone.svg" width="35%" alt="" />
+      </div>
     </div>
+  </div>
+
+  <div class="header__wave">
+    <img src="<?php echo $relative; ?>svg/header_wave.svg" width="100%" alt="" />
   </div>
 </div>
