@@ -65,7 +65,7 @@ require dirname(__FILE__).'/'.$relative.'include/head.php';
             include dirname(__FILE__).'/'.$relative.'template/header.php';
         }
         require dirname(__FILE__).'/'.$relative.'include/content.php';
-        // require dirname(__FILE__).'/'.$relative.'include/center_content.php';
+        require dirname(__FILE__).'/'.$relative.'include/center_content.php';
 
         // Generator required
         // require dirname(__FILE__).'/'.$relative.'include/generator.php';

@@ -30,7 +30,7 @@
             <img src="<?php echo $relative; ?>svg/icons/arrow.svg" alt="" />
         </div>
 
-        <div class="accordion" id="collapseSettings">
+        <!-- <div class="accordion" id="collapseSettings"> -->
             <div class="content__right col-lg-5">
                 <div class="right__header text-center">
                     <nav class="navbar sticky-top">
@@ -379,6 +379,6 @@
                     </div>
                 </div>
             </div>
-        </div>
+        <!-- </div> -->
     </div>
 </div>
