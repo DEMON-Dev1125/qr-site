@@ -205,18 +205,14 @@
             <div class="create__card">
                 <div class="row">
                     <div class="col-sm-6">
-                        <label><?php echo qrcdr()->getString(
-                            'size'
-                        ); ?></label>
+                        <label><?php echo qrcdr()->getString('size'); ?></label>
                         <select name="size" class="custom-select qrcode-size-selector">
                         <?php for ($i = 8; $i <= 32; $i += 4) {
                             $value = $i * 25;
                             echo '<option value="' .
                                 $i .
                                 '" ' .
-                                ($matrixPointSize == $i
-                                    ? 'selected'
-                                    : '') .
+                                ($matrixPointSize == $i ? 'selected' : '') .
                                 '>' .
                                 $value .
                                 '</option>';
@@ -234,36 +230,28 @@
                             ) {
                                 echo 'selected';
                             } ?>>
-                                <?php echo qrcdr()->getString(
-                                    'precision_l'
-                                ); ?>
+                                <?php echo qrcdr()->getString('precision_l'); ?>
                             </option>
                             <option value="M" <?php if (
                                 $errorCorrectionLevel == 'M'
                             ) {
                                 echo 'selected';
                             } ?>>
-                                <?php echo qrcdr()->getString(
-                                    'precision_m'
-                                ); ?>
+                                <?php echo qrcdr()->getString('precision_m'); ?>
                             </option>
                             <option value="Q" <?php if (
                                 $errorCorrectionLevel == 'Q'
                             ) {
                                 echo 'selected';
                             } ?>>
-                                <?php echo qrcdr()->getString(
-                                    'precision_q'
-                                ); ?>
+                                <?php echo qrcdr()->getString('precision_q'); ?>
                             </option>
                             <option value="H" <?php if (
                                 $errorCorrectionLevel == 'H'
                             ) {
                                 echo 'selected';
                             } ?>>
-                                <?php echo qrcdr()->getString(
-                                    'precision_h'
-                                ); ?>
+                                <?php echo qrcdr()->getString('precision_h'); ?>
                             </option>
                         </select>
                     </div>
