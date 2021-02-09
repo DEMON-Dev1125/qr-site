@@ -14,6 +14,9 @@
  */
 date_default_timezone_set('UTC');
 
+qrcdr()->init();
+qrcdr()->setLayout();
+
 $lang = qrcdr()->getLang();
 
 if (
@@ -30,7 +33,8 @@ $PNG_TEMP_DIR =
     DIRECTORY_SEPARATOR .
     qrcdr()->getConfig('qrcodes_dir') .
     DIRECTORY_SEPARATOR;
-$PNG_WEB_DIR = qrcdr()->getConfig('qrcodes_dir') . '/';
+$PNG_WEB_DIR =
+    qrcdr()->relativePath() . qrcdr()->getConfig('qrcodes_dir') . '/';
 
 if (!file_exists($PNG_TEMP_DIR)) {
     mkdir($PNG_TEMP_DIR);
@@ -66,3 +70,5 @@ $rounded_btn_nav = in_array('tabnav', $rounded_btn_options)
     ? ' rounded-pill'
     : '';
 require dirname(dirname(__FILE__)) . '/lib/countrycodes.php';
+
+$rtl = qrcdr()->isRtl();

@@ -12,7 +12,7 @@
  * @license   item sold on codecanyon https://codecanyon.net/item/qrcdr-responsive-qr-code-generator/9226839
  * @link      http://veno.es/qrcdr/
  */
-require dirname(dirname(__FILE__))."/config.php";
+require dirname(dirname(__FILE__)) . '/config.php';
 
 if (!class_exists('QRcdrFn', false)) {
     /**
@@ -59,9 +59,10 @@ if (!class_exists('QRcdrFn', false)) {
                     session_name($this->getConfig('session_name'));
                 }
                 if (PHP_VERSION_ID >= 70300) {
-                    session_set_cookie_params(
-                        ['httponly' => true, 'samesite' => 'strict']
-                    );
+                    session_set_cookie_params([
+                        'httponly' => true,
+                        'samesite' => 'strict',
+                    ]);
                 }
                 session_start();
             }
@@ -77,8 +78,11 @@ if (!class_exists('QRcdrFn', false)) {
         public function validateUrl($url)
         {
             $trim = trim($url);
-            $url = strpos($trim, 'http') !== 0 ? 'http://'.$trim : $trim;
-            return filter_var($url, FILTER_SANITIZE_STRING);
+            if (strlen($trim) >= 2) {
+                $url = strpos($trim, 'http') !== 0 ? 'http://' . $trim : $trim;
+                return filter_var($url, FILTER_SANITIZE_STRING);
+            }
+            return false;
 
             // $path = parse_url($url, PHP_URL_PATH);
             // $query = parse_url($url, PHP_URL_QUERY);
@@ -118,14 +122,21 @@ if (!class_exists('QRcdrFn', false)) {
 
             if ($browserDetect) {
                 $browserlang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
-                if (file_exists($relative."translations/".$browserlang.".php")) {
+                if (
+                    file_exists(
+                        $relative . 'translations/' . $browserlang . '.php'
+                    )
+                ) {
                     $lang = $browserlang;
-                    $_SESSION['lang'] = $lang;   
+                    $_SESSION['lang'] = $lang;
                 }
             }
-            $getlang = filter_input(INPUT_GET, "lang", FILTER_SANITIZE_STRING);
+            $getlang = filter_input(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
 
-            if ($getlang && file_exists($relative."translations/".$getlang.".php")) {
+            if (
+                $getlang &&
+                file_exists($relative . 'translations/' . $getlang . '.php')
+            ) {
                 $lang = $getlang;
                 $_SESSION['lang'] = $lang;
             }
@@ -138,6 +149,30 @@ if (!class_exists('QRcdrFn', false)) {
         }
 
         /**
+         * Get RTL direction
+         *
+         * @return bool
+         */
+        public function isRtl()
+        {
+            // Arabic, Azeri, Dhivehi, Hebrew, Kurdish, Persian (farsi), Urdu
+            $rtl_languages = ['ar', 'az', 'dv', 'he', 'ku', 'fa', 'ur'];
+            $lang = $this->getLang();
+
+            $values = [
+                'css' => 'css',
+                'dir' => 'ltr',
+            ];
+            if (in_array($lang, $rtl_languages)) {
+                $values = [
+                    'css' => 'rtl',
+                    'dir' => 'rtl',
+                ];
+            }
+            return $values;
+        }
+
+        /**
          * Get translated string
          *
          * @param string $string key to search
@@ -147,14 +182,14 @@ if (!class_exists('QRcdrFn', false)) {
         public function getString($string)
         {
             global $_translations;
-            $result = '>'.$string.'<';
+            $result = '>' . $string . '<';
 
             if (isset($_translations[$string])) {
                 $stringa = $_translations[$string];
                 if (strlen($stringa) > 0) {
                     $result = $_translations[$string];
                 }
-            } 
+            }
             return $result;
         }
 
@@ -183,7 +218,7 @@ if (!class_exists('QRcdrFn', false)) {
         public function relativePath()
         {
             $relative = $this->getConfig('relative_path', '');
-            $relative = strlen($relative) ? trim($relative, '/').'/' : '';
+            $relative = strlen($relative) ? trim($relative, '/') . '/' : '';
             return $relative;
         }
 
@@ -209,12 +244,15 @@ if (!class_exists('QRcdrFn', false)) {
          *
          * @return a clean directory
          */
-        public function deleteOldFiles($dir = 'qrcodes/', $age = 3600, $ext = 'png')
-        {
+        public function deleteOldFiles(
+            $dir = 'qrcodes/',
+            $age = 3600,
+            $ext = 'png'
+        ) {
             if (file_exists($dir)) {
-                $ext = strlen($ext) ? '.'.$ext : '';
+                $ext = strlen($ext) ? '.' . $ext : '';
                 $now = time();
-                $searchfiles = glob($dir.'*'.$ext);
+                $searchfiles = glob($dir . '*' . $ext);
                 foreach ($searchfiles as $file) {
                     $filelastmodified = filemtime($file);
                     $life = $now - $filelastmodified;
@@ -236,25 +274,44 @@ if (!class_exists('QRcdrFn', false)) {
         public function langMenu($type = 'menu', $class = 'langmenu')
         {
             $relative = $this->relativePath();
-            $langfiles = glob($relative.'translations/*.php');
+            $langfiles = glob($relative . 'translations/*.php');
             $lang = $this->getLang();
             if ($type == 'menu') {
-                $mymenu = '<li class="'.$class.' nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'.$this->getString('language').'</a><div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">';
+                $mymenu =
+                    '<li class="' .
+                    $class .
+                    ' nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' .
+                    $this->getString('language') .
+                    '</a><div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">';
                 foreach ($langfiles as $value) {
                     $val = basename($value, '.php');
                     $active = $val == $lang ? ' active' : '';
-                    $link = '?lang='.$val;
-                    $mymenu .= '<a class="dropdown-item'.$active.'" href="'.$link.'">'.$val.'</a>';
+                    $link = '?lang=' . $val;
+                    $mymenu .=
+                        '<a class="dropdown-item' .
+                        $active .
+                        '" href="' .
+                        $link .
+                        '">' .
+                        $val .
+                        '</a>';
                 }
-                $mymenu .='</div></li>';
+                $mymenu .= '</div></li>';
             } else {
                 $mymenu = '';
                 foreach ($langfiles as $value) {
                     $val = basename($value, '.php');
                     $active = $val == $lang ? ' active' : '';
-                    $link = '?lang='.$val; 
-                    $mymenu .= '<li class="nav-item'.$active.'"><a class="nav-link" href="'.$link.'">'.$val.'</a></li>';
+                    $link = '?lang=' . $val;
+                    $mymenu .=
+                        '<li class="nav-item' .
+                        $active .
+                        '"><a class="nav-link" href="' .
+                        $link .
+                        '">' .
+                        $val .
+                        '</a></li>';
                 }
             }
             return $mymenu;
@@ -273,8 +330,12 @@ if (!class_exists('QRcdrFn', false)) {
             // If user accidentally passed along the # sign, strip it off
             $colorCode = ltrim($colorCode, '#');
 
-            $colorCode = strlen($colorCode) > 6 ? substr($colorCode, 0, 6) : $colorCode;
-            $colorCode = strlen($colorCode) > 3 && strlen($colorCode) < 6 ? substr($colorCode, 0, 3) : $colorCode;
+            $colorCode =
+                strlen($colorCode) > 6 ? substr($colorCode, 0, 6) : $colorCode;
+            $colorCode =
+                strlen($colorCode) > 3 && strlen($colorCode) < 6
+                    ? substr($colorCode, 0, 3)
+                    : $colorCode;
 
             if (ctype_xdigit($colorCode)) {
                 $converted = hexdec(str_replace('#', '0x', $colorCode));
@@ -301,9 +362,11 @@ if (!class_exists('QRcdrFn', false)) {
          */
         public function randomColor()
         {
-            return '#'.$this->randomColorPart() . $this->randomColorPart() . $this->randomColorPart();
+            return '#' .
+                $this->randomColorPart() .
+                $this->randomColorPart() .
+                $this->randomColorPart();
         }
-
 
         /**
          * Increases or decreases the brightness of a color by a percentage of the current brightness.
@@ -318,15 +381,26 @@ if (!class_exists('QRcdrFn', false)) {
             $hexCode = ltrim($hexCode, '#');
 
             if (strlen($hexCode) == 3) {
-                $hexCode = $hexCode[0] . $hexCode[0] . $hexCode[1] . $hexCode[1] . $hexCode[2] . $hexCode[2];
+                $hexCode =
+                    $hexCode[0] .
+                    $hexCode[0] .
+                    $hexCode[1] .
+                    $hexCode[1] .
+                    $hexCode[2] .
+                    $hexCode[2];
             }
             $hexCode = array_map('hexdec', str_split($hexCode, 2));
 
-            foreach ($hexCode as & $color) {
+            foreach ($hexCode as &$color) {
                 $adjustableLimit = $adjustPercent < 0 ? $color : 255 - $color;
                 $adjustAmount = ceil($adjustableLimit * $adjustPercent);
 
-                $color = str_pad(dechex($color + $adjustAmount), 2, '0', STR_PAD_LEFT);
+                $color = str_pad(
+                    dechex($color + $adjustAmount),
+                    2,
+                    '0',
+                    STR_PAD_LEFT
+                );
             }
             return '#' . implode($hexCode);
         }
@@ -340,11 +414,18 @@ if (!class_exists('QRcdrFn', false)) {
          */
         public function HTMLToRGB($htmlCode)
         {
-            if($htmlCode[0] == '#')
-              $htmlCode = substr($htmlCode, 1);
+            if ($htmlCode[0] == '#') {
+                $htmlCode = substr($htmlCode, 1);
+            }
 
             if (strlen($htmlCode) == 3) {
-                $htmlCode = $htmlCode[0] . $htmlCode[0] . $htmlCode[1] . $htmlCode[1] . $htmlCode[2] . $htmlCode[2];
+                $htmlCode =
+                    $htmlCode[0] .
+                    $htmlCode[0] .
+                    $htmlCode[1] .
+                    $htmlCode[1] .
+                    $htmlCode[2] .
+                    $htmlCode[2];
             }
             $r = hexdec($htmlCode[0] . $htmlCode[1]);
             $g = hexdec($htmlCode[2] . $htmlCode[3]);
@@ -362,13 +443,13 @@ if (!class_exists('QRcdrFn', false)) {
          */
         public function RGBToHSL($RGB)
         {
-            $r = 0xFF & ($RGB >> 0x10);
-            $g = 0xFF & ($RGB >> 0x8);
-            $b = 0xFF & $RGB;
+            $r = 0xff & ($RGB >> 0x10);
+            $g = 0xff & ($RGB >> 0x8);
+            $b = 0xff & $RGB;
 
-            $r = ((float)$r) / 255.0;
-            $g = ((float)$g) / 255.0;
-            $b = ((float)$b) / 255.0;
+            $r = ((float) $r) / 255.0;
+            $g = ((float) $g) / 255.0;
+            $b = ((float) $b) / 255.0;
 
             $maxC = max($r, $g, $b);
             $minC = min($r, $g, $b);
@@ -379,7 +460,7 @@ if (!class_exists('QRcdrFn', false)) {
                 $s = 0;
                 $h = 0;
             } else {
-                if ($l < .5) {
+                if ($l < 0.5) {
                     $s = ($maxC - $minC) / ($maxC + $minC);
                 } else {
                     $s = ($maxC - $minC) / (2.0 - $maxC - $minC);
@@ -396,11 +477,15 @@ if (!class_exists('QRcdrFn', false)) {
                 $h = $h / 6.0;
             }
 
-            $h = (int)round(255.0 * $h);
-            $s = (int)round(255.0 * $s);
-            $l = (int)round(255.0 * $l);
+            $h = (int) round(255.0 * $h);
+            $s = (int) round(255.0 * $s);
+            $l = (int) round(255.0 * $l);
 
-            return (object) Array('hue' => $h, 'saturation' => $s, 'lightness' => $l);
+            return (object) [
+                'hue' => $h,
+                'saturation' => $s,
+                'lightness' => $l,
+            ];
         }
 
         /**
@@ -411,13 +496,13 @@ if (!class_exists('QRcdrFn', false)) {
          *
          * @return css rule
          */
-        public function setCss($selector = false, $attributes = array())
+        public function setCss($selector = false, $attributes = [])
         {
             $print = '';
             if ($selector && !empty($attributes)) {
-                $print = $selector.'{';
+                $print = $selector . '{';
                 foreach ($attributes as $key => $value) {
-                    $print .= $key.':'.$value.';';
+                    $print .= $key . ':' . $value . ';';
                 }
                 $print .= '}';
             }
@@ -432,12 +517,26 @@ if (!class_exists('QRcdrFn', false)) {
         public function setLayout()
         {
             global $_CONFIG;
-            $getlayout = filter_input(INPUT_GET, "layout", FILTER_SANITIZE_STRING);
-            $_CONFIG['layout'] = $getlayout ? $getlayout : $this->getConfig('layout');
-            $getsidebar = filter_input(INPUT_GET, "sidebar", FILTER_SANITIZE_STRING);
-            $_CONFIG['sidebar'] = $getsidebar ? $getsidebar : $this->getConfig('sidebar');
-            $getbtn = filter_input(INPUT_GET, "btn", FILTER_SANITIZE_STRING);
-            $_CONFIG['rounded_buttons'] = $getbtn ? false : $this->getConfig('rounded_buttons');
+            $getlayout = filter_input(
+                INPUT_GET,
+                'layout',
+                FILTER_SANITIZE_STRING
+            );
+            $_CONFIG['layout'] = $getlayout
+                ? $getlayout
+                : $this->getConfig('layout');
+            $getsidebar = filter_input(
+                INPUT_GET,
+                'sidebar',
+                FILTER_SANITIZE_STRING
+            );
+            $_CONFIG['sidebar'] = $getsidebar
+                ? $getsidebar
+                : $this->getConfig('sidebar');
+            $getbtn = filter_input(INPUT_GET, 'btn', FILTER_SANITIZE_STRING);
+            $_CONFIG['rounded_buttons'] = $getbtn
+                ? false
+                : $this->getConfig('rounded_buttons');
         }
 
         /**
@@ -450,7 +549,11 @@ if (!class_exists('QRcdrFn', false)) {
         public function getMainColor($primary = false)
         {
             $maincolor = $primary ? $primary : $this->randomColor();
-            $getcolor = filter_input(INPUT_GET, "color", FILTER_SANITIZE_STRING);
+            $getcolor = filter_input(
+                INPUT_GET,
+                'color',
+                FILTER_SANITIZE_STRING
+            );
             $maincolor = $getcolor ? $getcolor : $maincolor;
             return $maincolor;
         }
@@ -481,67 +584,71 @@ if (!class_exists('QRcdrFn', false)) {
                 $maincolor_dark = $this->adjustBrightness($maincolor, -0.3);
                 $output = '<style type="text/css">';
 
-                $output .= $this->setCss('a, .btn-link', array('color'=> $linkcolor));
-                $output .= $this->setCss('.text-primary', array('color'=> $maincolor.'!important'));
-                $output .= $this->setCss('.navbar-nav a, .navbar-nav .nav-link, .navbar-toggler', array('color'=> $maintext));
+                $output .= $this->setCss('a, .btn-link', [
+                    'color' => $linkcolor,
+                ]);
+                $output .= $this->setCss('.text-primary', [
+                    'color' => $maincolor . '!important',
+                ]);
+                $output .= $this->setCss(
+                    '.navbar-nav a, .navbar-nav .nav-link, .navbar-toggler',
+                    ['color' => $maintext]
+                );
                 $output .= $this->setCss(
                     'a:hover, a:active, a:focus, .btn-link:hover, .btn-link:active, .btn-link:focus, .dropdown-menu a.dropdown-item',
-                    array(
-                        'color'=> $maincolor_dark
-                    )
+                    [
+                        'color' => $maincolor_dark,
+                    ]
                 );
                 $output .= $this->setCss(
                     '.bg-primary, .nav-pills .nav-link.active, .nav-pills .show > .nav-link, label.custom-file-label:after',
-                    array(
-                        'color'=> $maintext,
-                        'background-color'=> $maincolor.'!important',
-                    )
+                    [
+                        'color' => $maintext,
+                        'background-color' => $maincolor . '!important',
+                    ]
                 );
                 $output .= $this->setCss(
                     'a.dropdown-item.active, a.dropdown-item:active',
-                    array(
-                        '-webkit-box-shadow'=> 'inset 4px 0 0 0 '.$maincolor,
-                        'box-shadow'=> 'inset 4px 0 0 0 '.$maincolor,
+                    [
+                        '-webkit-box-shadow' => 'inset 4px 0 0 0 ' . $maincolor,
+                        'box-shadow' => 'inset 4px 0 0 0 ' . $maincolor,
                         'background-color' => 'transparent',
-                    )
+                    ]
                 );
                 $output .= $this->setCss(
                     '.btn-primary, .btn-primary:disabled',
-                    array(
-                        'border-color'=> $maincolor,
-                        'background-color'=> $maincolor,
-                        'color'=> $maintext,
-                    )
+                    [
+                        'border-color' => $maincolor,
+                        'background-color' => $maincolor,
+                        'color' => $maintext,
+                    ]
                 );
                 $output .= $this->setCss(
                     '.btn-outline-primary, .btn-outline-primary:disabled',
-                    array(
-                        'border-color'=> $maincolor,
-                        'color'=> $maincolor,
-                    )
+                    [
+                        'border-color' => $maincolor,
+                        'color' => $maincolor,
+                    ]
                 );
                 $output .= $this->setCss(
                     '.btn-primary:hover,.btn-primary:active,.btn-primary:focus,.btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show > .btn-primary.dropdown-toggle,.btn-outline-primary:hover,.btn-outline-primary:active,.btn-outline-primary:focus,.btn-outline-primary:not(:disabled):not(.disabled).active, .btn-outline-primary:not(:disabled):not(.disabled):active, .show > .btn-outline-primary.dropdown-toggle',
-                    array(
-                        'border-color'=> $maincolor_dark,
-                        'background-color'=> $maincolor_dark,
-                        'color'=> $maintext
-                    )
+                    [
+                        'border-color' => $maincolor_dark,
+                        'background-color' => $maincolor_dark,
+                        'color' => $maintext,
+                    ]
                 );
-                $output .= $this->setCss(
-                    '.btn-outline-light',
-                    array(
-                        'border-color'=> $maintext,
-                        'color'=> $maintext,
-                    )
-                );
+                $output .= $this->setCss('.btn-outline-light', [
+                    'border-color' => $maintext,
+                    'color' => $maintext,
+                ]);
                 $output .= $this->setCss(
                     '.btn-outline-light:hover,.btn-outline-light:active,.btn-outline-light:focus,.btn-outline-light:not(:disabled):not(.disabled).active, .btn-outline-light:not(:disabled):not(.disabled):active, .show > .btn-outline-light.dropdown-toggle',
-                    array(
-                        'background-color'=> $maintext,
-                        'border-color'=> $maintext,
-                        'color'=> $maincolor,
-                    )
+                    [
+                        'background-color' => $maintext,
+                        'border-color' => $maintext,
+                        'color' => $maincolor,
+                    ]
                 );
                 $output .= '</style>';
             }
@@ -561,7 +668,7 @@ if (!class_exists('QRcdrFn', false)) {
         {
             // $remote_json = "https://bitpay.com/api/rates/BTC/USD";
             // $remote_json = "https://api.coinbase.com/v2/exchange-rates?currency=BTC";
-            $remote_json = "https://api.coinbase.com/v2/prices/BTC-USD/spot";
+            $remote_json = 'https://api.coinbase.com/v2/prices/BTC-USD/spot';
 
             $json = file_get_contents($remote_json);
 
@@ -570,11 +677,20 @@ if (!class_exists('QRcdrFn', false)) {
             // $btc = $data->rate;
             $btc = $data->data->amount;
 
-            $dollar = round(1/$btc, 8);
+            $dollar = round(1 / $btc, 8);
 
-            $output = '<small class="form-text text-muted">1 BTC = ' . rtrim(rtrim(sprintf('%f', $btc), '0'), ".") . ' USD<br />';
-            $output .= '1 USD = '.rtrim(rtrim(sprintf('%f', $dollar), '0'), ".").' BTC</small>';
-            $output .= '<small class="form-text text-muted">Last update: '. date('F d Y').'<br>Spot price from Coinbase</small>';
+            $output =
+                '<small class="form-text text-muted">1 BTC = ' .
+                rtrim(rtrim(sprintf('%f', $btc), '0'), '.') .
+                ' USD<br />';
+            $output .=
+                '1 USD = ' .
+                rtrim(rtrim(sprintf('%f', $dollar), '0'), '.') .
+                ' BTC</small>';
+            $output .=
+                '<small class="form-text text-muted">Last update: ' .
+                date('F d Y') .
+                '<br>Spot price from Coinbase</small>';
 
             return $output;
         }
@@ -589,14 +705,24 @@ if (!class_exists('QRcdrFn', false)) {
         public function loadQRcdrCSS($version = '')
         {
             $relative = $this->relativePath();
-            echo '<link href="'.$relative.'js/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css" rel="stylesheet">';
+            echo '<link href="' .
+                $relative .
+                'js/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css" rel="stylesheet">';
             if ($this->getConfig('location') == true) {
-                echo '<link href="'.$relative.'js/ol/ol.css" rel="stylesheet">';
+                echo '<link href="' .
+                    $relative .
+                    'js/ol/ol.css" rel="stylesheet">';
             }
             if ($this->getConfig('event') == true) {
-                echo '<link href="'.$relative.'js/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet">';
+                echo '<link href="' .
+                    $relative .
+                    'js/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet">';
             }
-            echo '<link href="'.$relative.'style.css?v='.$version.'" rel="stylesheet">';
+            echo '<link href="' .
+                $relative .
+                'style.css?v=' .
+                $version .
+                '" rel="stylesheet">';
         }
 
         /**
@@ -610,24 +736,48 @@ if (!class_exists('QRcdrFn', false)) {
         {
             $relative = $this->relativePath();
             $lang = $this->getLang();
-            
+
             // moment.js for event calendar
             if ($this->getConfig('event') == true) {
-                echo '<script src="'.$relative.'js/moment/moment.min.js"></script>';
+                echo '<script src="' .
+                    $relative .
+                    'js/moment/moment.min.js"></script>';
                 if ($lang !== 'en') {
-                    echo '<script src="'.$relative.'js/moment/locale/'.$lang.'.js"></script>';
+                    echo '<script src="' .
+                        $relative .
+                        'js/moment/locale/' .
+                        $lang .
+                        '.js"></script>';
                 }
-                echo '<script src="'.$relative.'js/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>';
+                echo '<script src="' .
+                    $relative .
+                    'js/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>';
             }
             if ($this->getConfig('debug_mode')) {
-                echo '<script src="'.$relative.'js/popper.js"></script>';
-                echo '<script src="'.$relative.'bootstrap/js/bootstrap.min.js"></script>';
-                echo '<script src="'.$relative.'js/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"></script>';
-                echo '<script src="'.$relative.'js/bootbox.min.js"></script>';
-                echo '<script src="'.$relative.'js/bootstrap-maxlength.min.js"></script>';
-                echo '<script src="'.$relative.'js/qrcdr.js?v='.$version.'"></script>';
+                echo '<script src="' . $relative . 'js/popper.js"></script>';
+                echo '<script src="' .
+                    $relative .
+                    'bootstrap/js/bootstrap.min.js"></script>';
+                echo '<script src="' .
+                    $relative .
+                    'js/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"></script>';
+                echo '<script src="' .
+                    $relative .
+                    'js/bootbox.min.js"></script>';
+                echo '<script src="' .
+                    $relative .
+                    'js/bootstrap-maxlength.min.js"></script>';
+                echo '<script src="' .
+                    $relative .
+                    'js/qrcdr.js?v=' .
+                    $version .
+                    '"></script>';
             } else {
-                echo '<script src="'.$relative.'js/qrcdr.min.js?v='.$version.'"></script>';
+                echo '<script src="' .
+                    $relative .
+                    'js/qrcdr.min.js?v=' .
+                    $version .
+                    '"></script>';
             }
         }
 
@@ -639,16 +789,23 @@ if (!class_exists('QRcdrFn', false)) {
         public function loadPlugins()
         {
             $relative = $this->relativePath();
-            if (file_exists($relative.'plugins')) {
-                $plugins = glob($relative.'plugins/*');
+            if (file_exists($relative . 'plugins')) {
+                $plugins = glob($relative . 'plugins/*');
                 foreach ($plugins as $plugin) {
                     if (is_dir($plugin)) {
                         $folder = $plugin;
-                        if (substr($plugin, 0, strlen($relative)) == $relative) {
+                        if (
+                            substr($plugin, 0, strlen($relative)) == $relative
+                        ) {
                             $folder = substr($plugin, strlen($relative));
                         }
                         $plug = basename($plugin);
-                        include dirname(dirname(__FILE__)).'/'.$folder.'/'.$plug.'.php';
+                        include dirname(dirname(__FILE__)) .
+                            '/' .
+                            $folder .
+                            '/' .
+                            $plug .
+                            '.php';
                     }
                 }
             }
@@ -664,11 +821,11 @@ if (!class_exists('QRcdrFn', false)) {
         public function loadPluginsCss($echo = true)
         {
             $relative = $this->relativePath();
-            if (file_exists($relative.'plugins')) {
-                $pluginscss = glob($relative.'plugins/*/*.css');
+            if (file_exists($relative . 'plugins')) {
+                $pluginscss = glob($relative . 'plugins/*/*.css');
                 $output = '';
                 foreach ($pluginscss as $style) {
-                    $output .= '<link href="'.$style.'" rel="stylesheet">';
+                    $output .= '<link href="' . $style . '" rel="stylesheet">';
                 }
                 if ($echo) {
                     echo $output;
