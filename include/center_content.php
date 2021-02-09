@@ -203,6 +203,7 @@
             </div>
             </div>
             <div class="create__card">
+            
                 <div class="row">
                     <div class="col-sm-6">
                         <label><?php echo qrcdr()->getString('size'); ?></label>
