@@ -1,55 +1,63 @@
 <?php $sidebarorder = 'left' == qrcdr()->getConfig('sidebar') ? '' : ' order-last'; ?>
 <input type="hidden" id="qrcdr-relative" value="<?php echo $relative; ?>">
-<div class="container">
-    <div class="row mt-3">
 
-        <div class="col-lg-4<?php echo $sidebarorder; ?>">
-            <?php require dirname(__FILE__).'/placeholder.php'; ?>
-        </div><!-- col md-4-->
+<div class="content__section container-fluid">
+    <div class="container content__body">
+        <div class="row mt-3">
 
-        <div class="col-lg-8 pt-3 mb-3">
-            <div class="row">
-                <form role="form" class="qrcdr-form needs-validation w-100" novalidate>
-                    <input type="submit" class="d-none">
-                    <input type="hidden" name="section" id="getsec" value="<?php echo $getsection; ?>">
-                    <?php
-                    /**
-                     * QR CODE DATA
-                     */ ?>
-                    <div class="col-12 pb-2">
-                        <div class="row">
-                            <?php
-                            require dirname(__FILE__).'/tabnav.php';
-                            ?>
-                            <div class="tab-content mt-3" id="dataTabs">
-                            <?php
-                            require dirname(__FILE__).'/tab-link.php';
-                            require dirname(__FILE__).'/tab-text.php';
-                            require dirname(__FILE__).'/tab-email.php';
-                            require dirname(__FILE__).'/tab-location.php';
-                            require dirname(__FILE__).'/tab-tel.php';
-                            require dirname(__FILE__).'/tab-sms.php';
-                            require dirname(__FILE__).'/tab-whatsapp.php';
-                            require dirname(__FILE__).'/tab-skype.php';
-                            require dirname(__FILE__).'/tab-zoom.php';
-                            require dirname(__FILE__).'/tab-wifi.php';
-                            require dirname(__FILE__).'/tab-vcard.php';
-                            require dirname(__FILE__).'/tab-event.php';
-                            require dirname(__FILE__).'/tab-paypal.php';
-                            require dirname(__FILE__).'/tab-bitcoin.php';
-                            ?>
-                            </div> <!-- tab content -->
+            <div class="content__right col-lg-4<?php echo $sidebarorder; ?>">
+                <?php require dirname(__FILE__).'/placeholder.php'; ?>
+            </div><!-- col md-4-->
 
-                            
-                            </div><!-- main-col open at tabnav -->
-                        </div> <!-- row -->
-                    </div><!-- col sm12-->
-                </form>
-            </div> <!-- row -->
-        </div><!-- col-lg-8 -->
+            <div class="left__arrow">
+                <img src="<?php echo $relative; ?>svg/icons/arrow.svg" alt="" />
+            </div>
 
-    </div><!-- row -->
-</div><!-- container -->
+            <div class="content__left col-lg-8 pt-3 mb-3">
+                <div class="row">
+                    <form role="form" class="qrcdr-form needs-validation w-100" novalidate>
+                        <input type="submit" class="d-none">
+                        <input type="hidden" name="section" id="getsec" value="<?php echo $getsection; ?>">
+                        <?php
+                        /**
+                         * QR CODE DATA
+                         */ ?>
+                        <div class="col-12 pb-2">
+                            <div class="row">
+                                <?php
+                                require dirname(__FILE__).'/tabnav.php';
+                                ?>
+                                <div class="tab-content mt-3" id="dataTabs">
+                                <?php
+                                require dirname(__FILE__).'/tab-link.php';
+                                require dirname(__FILE__).'/tab-text.php';
+                                require dirname(__FILE__).'/tab-email.php';
+                                require dirname(__FILE__).'/tab-location.php';
+                                require dirname(__FILE__).'/tab-tel.php';
+                                require dirname(__FILE__).'/tab-sms.php';
+                                require dirname(__FILE__).'/tab-whatsapp.php';
+                                require dirname(__FILE__).'/tab-skype.php';
+                                require dirname(__FILE__).'/tab-zoom.php';
+                                require dirname(__FILE__).'/tab-wifi.php';
+                                require dirname(__FILE__).'/tab-vcard.php';
+                                require dirname(__FILE__).'/tab-event.php';
+                                require dirname(__FILE__).'/tab-paypal.php';
+                                require dirname(__FILE__).'/tab-bitcoin.php';
+                                ?>
+                                </div> <!-- tab content -->
+
+                                
+                                </div><!-- main-col open at tabnav -->
+                            </div> <!-- row -->
+                        </div><!-- col sm12-->
+                    </form>
+                </div> <!-- row -->
+            </div><!-- col-lg-8 -->
+
+        </div><!-- row -->
+    </div><!-- container -->
+</div>
+
 <div class="alert_placeholder toast" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="false">
     <div class="toast-header">
         <div class="mr-auto">

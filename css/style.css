@@ -371,6 +371,15 @@ input:checked + .slider:before {
   margin-top: 20px;
   margin-bottom: 20px;
 }
+.btn-outline-primary:focus {
+  outline-style: none !important;
+}
+.btn-primary {
+  background-color: #31a1d3 i !important;
+}
+.btn-primary:focus {
+  background-color: #31a1d3 i !important;
+}
 
 @media (min-width: 1300px) {
   .container {
@@ -394,8 +403,11 @@ input:checked + .slider:before {
   .left__arrow {
     z-index: 10;
     position: absolute;
-    right: 40.5%;
-    top: 50%;
+    right: 31.5%;
+    top: 43%;
+  }
+  .left__arrow img{
+    max-width: 80%;
   }
   .center__progress {
     margin-top: 72px;
