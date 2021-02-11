@@ -24,6 +24,7 @@
 .header__link {
   margin-top: 4.313rem;
 }
+
 /* header section style */
 @media screen and (max-width: 1024px) {
   .header__phone {

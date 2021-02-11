@@ -13,7 +13,7 @@
                 <img src="<?php echo $relative; ?>svg/icons/arrow.svg" alt="" />
             </div>
 
-            <div class="content__left col-lg-8 pt-3 mb-3">
+            <div class="content__left col-lg-8 pt-3">
                 <div class="row">
                     <form role="form" class="qrcdr-form needs-validation w-100" novalidate>
                         <input type="submit" class="d-none">
@@ -46,6 +46,13 @@
                                 ?>
                                 </div> <!-- tab content -->
 
+                                <div class="mt-3">
+                                    <?php
+                                        if (file_exists(dirname(dirname(__FILE__)).'/'.$relative.'include/options.php')) {
+                                            include dirname(dirname(__FILE__)).'/'.$relative.'include/options.php';
+                                        }
+                                    ?>
+                                </div>
                                 
                                 </div><!-- main-col open at tabnav -->
                             </div> <!-- row -->
