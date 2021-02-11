@@ -6,7 +6,15 @@
         <div class="row mt-3">
 
             <div class="content__right col-lg-4<?php echo $sidebarorder; ?>">
-                <?php require dirname(__FILE__).'/placeholder.php'; ?>
+                <div>
+                    <?php require dirname(__FILE__).'/placeholder.php'; ?>
+                </div>    
+
+                <div class="mt-3">
+                    <form role="form" class="qrcdr-form needs-validation w-100" novalidate>
+                        <?php require dirname(__FILE__).'/options.php'; ?>
+                    </form>
+                </div>
             </div><!-- col md-4-->
 
             <div class="left__arrow">
@@ -45,14 +53,6 @@
                                 require dirname(__FILE__).'/tab-bitcoin.php';
                                 ?>
                                 </div> <!-- tab content -->
-
-                                <div class="mt-3">
-                                    <?php
-                                        if (file_exists(dirname(dirname(__FILE__)).'/'.$relative.'include/options.php')) {
-                                            include dirname(dirname(__FILE__)).'/'.$relative.'include/options.php';
-                                        }
-                                    ?>
-                                </div>
                                 
                                 </div><!-- main-col open at tabnav -->
                             </div> <!-- row -->
