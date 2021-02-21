@@ -42,7 +42,11 @@ if (file_exists(dirname(dirname(__FILE__))."/translations/".$lang.".php")) {
 $output_data = false;
 $getsection = filter_input(INPUT_POST, "section", FILTER_SANITIZE_STRING);
 $setbackcolor = filter_input(INPUT_POST, "backcolor", FILTER_SANITIZE_STRING);
+$setbackcolor = $setbackcolor ? $setbackcolor : qrcdr()->getConfig('qr_bgcolor');
+
 $setfrontcolor = filter_input(INPUT_POST, "frontcolor", FILTER_SANITIZE_STRING);
+$setfrontcolor = $setfrontcolor ? $setfrontcolor : qrcdr()->getConfig('qr_color');
+
 $optionlogo = filter_input(INPUT_POST, "optionlogo", FILTER_SANITIZE_STRING);
 $no_logo_bg = isset($_POST['no_logo_bg']);
 $pattern = filter_input(INPUT_POST, "pattern", FILTER_SANITIZE_STRING);
@@ -74,6 +78,8 @@ $custom_frame_color = isset($_POST['custom_frame_color']);
 $framecolor = filter_input(INPUT_POST, "framecolor", FILTER_SANITIZE_STRING);
 $framelabel = filter_input(INPUT_POST, "framelabel", FILTER_SANITIZE_STRING);
 $label_font = filter_input(INPUT_POST, "label_font", FILTER_SANITIZE_STRING);
+$logo_size = filter_input(INPUT_POST, "logo-size", FILTER_SANITIZE_STRING);
+$label_text_size = filter_input(INPUT_POST, "label-text-size", FILTER_SANITIZE_STRING);
 
 $optionlogo = $optionlogo ? $optionlogo : 'none';
 $outerframe = $outerframe ? $outerframe : 'none';
@@ -108,6 +114,8 @@ $optionstyle = array(
     'framelabel' => $framelabel,
     'label_font' => $label_font,
     'labeltext_color' => $labeltext_color,
+    'logo_size' => $logo_size,
+    'label_text_size' => $label_text_size,
 );
 
 $stringbackcolor = $setbackcolor ? $setbackcolor : '#FFFFFF';
@@ -116,7 +124,7 @@ $backcolor = qrcdr()->hexdecColor($stringbackcolor, '#FFFFFF');
 $frontcolor = qrcdr()->hexdecColor($stringfrontcolor, '#000000');
 
 $level = filter_input(INPUT_POST, "level", FILTER_SANITIZE_STRING);
-$size = filter_input(INPUT_POST, "size", FILTER_SANITIZE_STRING);
+$level = $level ? $level : qrcdr()->getConfig('precision');
 
 if (in_array($level, array('L','M','Q','H'))) {
     $errorCorrectionLevel = $level;
@@ -124,9 +132,9 @@ if (in_array($level, array('L','M','Q','H'))) {
         $errorCorrectionLevel = 'M';
     }
 }
-if ($size) {
-    $matrixPointSize = min(max((int)$size, 4), 32);
-}
+$size = filter_input(INPUT_POST, "size", FILTER_SANITIZE_STRING);
+$size = $size ? $size : 16;
+$matrixPointSize = min(max((int)$size, 4), 32);
 
 switch ($getsection) {
 
@@ -237,13 +245,13 @@ case '#vcard':
     $vnametitle = filter_input(INPUT_POST, "vnametitle", FILTER_SANITIZE_STRING);
     $vname = filter_input(INPUT_POST, "vname", FILTER_SANITIZE_STRING);
     $vlast = filter_input(INPUT_POST, "vlast", FILTER_SANITIZE_STRING);
-    $fn           = $vname.' '.$vlast;
-    $fn     = $vnametitle ? $sortName.' '.$fn : $fn;
     $sortName     = $vlast.';'.$vname;
     $sortName     = $vnametitle ? $sortName.';;'.$vnametitle : $sortName;
     if ($vversion !== '2.1') {
         $sortName .= ';';
     }
+    $fn           = $vname.' '.$vlast;
+    $fn           = $vnametitle ? $sortName.' '.$fn : $fn;
     $countryphone = filter_input(INPUT_POST, "countrycodevphone", FILTER_SANITIZE_STRING);
     $countryphone = ($countryphone ? '+'.$countryphone : '');
     $phone        = filter_input(INPUT_POST, "vphone", FILTER_SANITIZE_STRING);
@@ -475,7 +483,8 @@ if ($output_data) {
     $result = array(
         'basename' => $basename,
         'content' => $content,
-        );
+        'gradient' => $gradient
+    );
     $result = json_encode($result);
 } else {
     $result = json_encode(

@@ -1,5 +1,14 @@
-.input[type="text"] {
-  height: 50px !important;
+html {
+  scroll-behavior: smooth;
+}
+.form-control {
+  font-size: 16px !important;
+}
+.scroll {
+  background-color: #fff;
+}
+.header {
+  margin-top: 95px;
 }
 .header__section {
   padding: 0 7.688rem;
@@ -77,4 +86,16 @@
     font-size: 30px;
     line-height: 35px;
   }
+}
+
+.fa-plus,
+.fa-minus {
+  padding-top: 8px;
+}
+.top-menu-wrapper {
+  z-index: 99;
+  width: 100%;
+  transition: all 0.3s ease-in;
+  background: #ffffffed;
+  box-shadow: 0 0px 10px 0px rgb(50 50 50 / 30%);
 }

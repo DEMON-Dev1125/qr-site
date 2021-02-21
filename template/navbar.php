@@ -1,18 +1,13 @@
-<nav class="navbar bg-primary m-0 navbar-expand-sm navbar-dark bg-dark">
-	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#qrcdrNavbar" aria-controls="qrcdrNavbar" aria-expanded="false" aria-label="Toggle navigation">
+<nav class="navbar navbar-expand-sm fixed-top top-menu-wrapper" id="navbar">
+	<div class="container">
+		<a href="<?php echo $relative?>index.php"><img src="<?php echo $relative; ?>svg/logo.svg" alt="" /></a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
 		<span class="navbar-toggler-icon"></span>
-	</button>
-	<div class="collapse navbar-collapse" id="qrcdrNavbar">
-		<ul class="navbar-nav ml-auto">
-<!--
-		<li class="nav-item">
-			<a class="nav-link" href="#">Link 1</a>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link" href="#">Link 2</a>
-		</li>
--->
-			<?php echo qrcdr()->langMenu('menu'); ?>
+		</button>
+		<div class="collapse navbar-collapse justify-content-end" id="collapsibleNavbar">
+		<ul class="navbar-nav">
+			<?php echo qrcdr()->langMenu('menu'); ?>  
 		</ul>
+		</div>  
 	</div>
 </nav>

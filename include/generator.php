@@ -1,20 +1,15 @@
 <?php $sidebarorder = 'left' == qrcdr()->getConfig('sidebar') ? '' : ' order-last'; ?>
 <input type="hidden" id="qrcdr-relative" value="<?php echo $relative; ?>">
-
-<div class="content__section container-fluid">
+<div class="content__section" id="qr__section">
     <div class="container content__body">
         <div class="row mt-3">
 
             <div class="content__right col-lg-4<?php echo $sidebarorder; ?>">
-                <div>
-                    <?php require dirname(__FILE__).'/placeholder.php'; ?>
-                </div>    
+                <?php require dirname(__FILE__).'/placeholder.php'; ?>
 
-                <div class="mt-3">
-                    <form role="form" class="qrcdr-form needs-validation w-100" novalidate>
-                        <?php require dirname(__FILE__).'/options.php'; ?>
-                    </form>
-                </div>
+                <form role="form" class="qrcdr-form needs-validation w-100" novalidate>
+                    <?php require dirname(__FILE__).'/options.php'; ?>
+                </form>
             </div><!-- col md-4-->
 
             <div class="left__arrow">
@@ -53,7 +48,7 @@
                                 require dirname(__FILE__).'/tab-bitcoin.php';
                                 ?>
                                 </div> <!-- tab content -->
-                                
+
                                 </div><!-- main-col open at tabnav -->
                             </div> <!-- row -->
                         </div><!-- col sm12-->
@@ -62,9 +57,9 @@
             </div><!-- col-lg-8 -->
 
         </div><!-- row -->
-    </div><!-- container -->
+    </div>
 </div>
-
+</div><!-- container -->
 <div class="alert_placeholder toast" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="false">
     <div class="toast-header">
         <div class="mr-auto">

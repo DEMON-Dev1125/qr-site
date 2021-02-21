@@ -1,11 +1,11 @@
 /*
  * QrCdr - jQuery Plugin
- * version: 5.1.5
+ * version: 5.2
  * @requires jQuery >= 1.7.0
  * @requires popper
  * @requires bootstrap
  * @requires bootbox
- * @requires colorpicker
+ * @requires spectrum
  * @requires bootstrap-maxlength
  *
  * Copyright 2020-2021 Nicola Franchini - @nicolafranchini
@@ -20,10 +20,11 @@
         qrcdr: function(options) {
             var plugin = this;
             var $myForm, formInputs, formOnInput, formOnChange, submitform, linksholder, qrcolorpicker, colorpickerback, preloader, alert_placeholder, transparent_bg, resultholder, generate_qrcode_btn, holdresult;
-            var collapse_control, collapse_control_reverse, upmarker, isSvg, event, map, timer, setvalue, yesdonation, nodonation, init_lat, init_lng, btcInput, settings, tabs, section, relative, sendOptions;
+            var collapse_control, collapse_control_reverse, upmarker, isSvg, event, map, timer, setvalue, yesdonation, nodonation, init_lat, init_lng, btcInput, settings, tabs, section, relative, sendOptions, slider;
 
             var svgIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 48 48"><path d="M28.9,18.4l-3.4,3.4V10.5C25.5,9.7,24.8,9,24,9s-1.5,0.7-1.5,1.5v11.4l-3.4-3.4c-0.6-0.6-1.5-0.6-2.1,0 c-0.6,0.6-0.6,1.5,0,2.1l6,6c0.6,0.6,1.5,0.6,2.1,0c0,0,0,0,0,0l6-6c0.6-0.6,0.6-1.5,0-2.1C30.5,17.9,29.5,17.9,28.9,18.4z"/><path d="M42,30V13.5L28.5,0H12C8.7,0,6,2.7,6,6v24c-1.7,0.1-3,1.4-3,3.1v5.8c0,1.7,1.3,3,3,3.1v0c0,3.3,2.7,6,6,6h24 c3.3,0,6-2.7,6-6v0c1.7-0.1,3-1.4,3-3.1v-5.8C45,31.4,43.7,30.1,42,30z M36,45H12c-1.7,0-3-1.3-3-3h30C39,43.7,37.7,45,36,45z M16.6,37.2c-0.2-0.2-0.4-0.3-0.7-0.4c-0.3-0.1-0.6-0.2-1.1-0.3c-0.6-0.1-1.1-0.3-1.6-0.5c-0.4-0.2-0.8-0.5-1-0.8 c-0.2-0.3-0.4-0.8-0.4-1.3c0-0.5,0.1-0.9,0.4-1.3c0.3-0.4,0.6-0.7,1.1-0.9c0.5-0.2,1.1-0.3,1.7-0.3c0.5,0,1,0.1,1.4,0.2 c0.4,0.1,0.7,0.3,1,0.5c0.3,0.2,0.4,0.4,0.6,0.7c0.1,0.2,0.2,0.5,0.2,0.7c0,0.2-0.1,0.4-0.2,0.6s-0.3,0.3-0.6,0.3 c-0.2,0-0.4-0.1-0.5-0.2c-0.1-0.1-0.2-0.3-0.3-0.5c-0.2-0.3-0.3-0.6-0.6-0.8c-0.2-0.2-0.6-0.3-1.1-0.3c-0.5,0-0.8,0.1-1.1,0.3 s-0.4,0.4-0.4,0.7c0,0.2,0,0.3,0.1,0.4c0.1,0.1,0.2,0.2,0.4,0.3c0.2,0.1,0.3,0.2,0.5,0.2c0.2,0.1,0.4,0.1,0.8,0.2 c0.5,0.1,0.9,0.2,1.3,0.4c0.4,0.1,0.7,0.3,1,0.5c0.3,0.2,0.5,0.4,0.6,0.7s0.2,0.7,0.2,1.1c0,0.5-0.1,1-0.4,1.4 c-0.3,0.4-0.7,0.7-1.2,1c-0.5,0.2-1.1,0.4-1.8,0.4c-0.9,0-1.6-0.2-2.1-0.5c-0.4-0.2-0.7-0.5-1-0.9c-0.2-0.4-0.4-0.8-0.4-1.1 c0-0.2,0.1-0.4,0.2-0.5s0.3-0.2,0.6-0.2c0.2,0,0.3,0.1,0.5,0.2c0.1,0.1,0.2,0.3,0.3,0.5c0.1,0.3,0.2,0.5,0.4,0.7s0.3,0.3,0.5,0.5 c0.2,0.1,0.5,0.2,0.9,0.2c0.5,0,0.9-0.1,1.3-0.4c0.3-0.2,0.5-0.5,0.5-0.9C16.9,37.7,16.8,37.4,16.6,37.2z M19.5,32.4 c0-0.2,0.1-0.4,0.2-0.5s0.4-0.2,0.6-0.2c0.3,0,0.5,0.1,0.6,0.3c0.1,0.2,0.2,0.5,0.4,0.9l2,5.8l2-5.8c0.1-0.3,0.2-0.5,0.2-0.6 c0.1-0.1,0.1-0.2,0.3-0.3c0.1-0.1,0.3-0.1,0.5-0.1c0.2,0,0.3,0,0.4,0.1c0.1,0.1,0.2,0.2,0.3,0.3s0.1,0.2,0.1,0.4c0,0.1,0,0.2,0,0.3 S27,32.8,27,32.9c0,0.1-0.1,0.2-0.1,0.3l-2.1,5.6c-0.1,0.2-0.2,0.4-0.2,0.6c-0.1,0.2-0.2,0.4-0.3,0.5s-0.2,0.3-0.4,0.4 s-0.4,0.1-0.6,0.1c-0.2,0-0.4,0-0.6-0.1c-0.2-0.1-0.3-0.2-0.4-0.4c-0.1-0.2-0.2-0.3-0.3-0.5c-0.1-0.2-0.1-0.4-0.2-0.6l-2.1-5.6 c0-0.1-0.1-0.2-0.1-0.3c0-0.1-0.1-0.2-0.1-0.3C19.5,32.5,19.5,32.4,19.5,32.4z M30.4,38.3c0.5,0.5,1.1,0.8,1.9,0.8 c0.4,0,0.8-0.1,1.1-0.2c0.4-0.1,0.7-0.3,1.1-0.5v-1.4h-1.4c-0.3,0-0.6,0-0.7-0.1c-0.2-0.1-0.3-0.3-0.3-0.5c0-0.2,0.1-0.4,0.2-0.5 c0.1-0.1,0.3-0.2,0.6-0.2h2c0.2,0,0.5,0,0.6,0.1c0.2,0,0.3,0.1,0.4,0.3c0.1,0.1,0.2,0.4,0.2,0.7v1.7c0,0.2,0,0.4-0.1,0.5 c0,0.1-0.1,0.2-0.2,0.4s-0.3,0.2-0.4,0.3c-0.5,0.3-1,0.5-1.5,0.6s-1,0.2-1.6,0.2c-0.7,0-1.3-0.1-1.8-0.3c-0.5-0.2-1-0.5-1.4-0.9 c-0.4-0.4-0.7-0.9-0.9-1.4c-0.2-0.6-0.3-1.2-0.3-1.9c0-0.7,0.1-1.3,0.3-1.8c0.2-0.6,0.5-1,0.9-1.4s0.9-0.7,1.4-0.9 c0.6-0.2,1.2-0.3,1.9-0.3c0.6,0,1.1,0.1,1.5,0.2s0.8,0.4,1.1,0.6c0.3,0.2,0.5,0.5,0.6,0.7c0.1,0.3,0.2,0.5,0.2,0.7 c0,0.2-0.1,0.4-0.2,0.6s-0.4,0.2-0.6,0.2c-0.1,0-0.2,0-0.4-0.1c-0.1-0.1-0.2-0.1-0.3-0.2c-0.2-0.3-0.4-0.6-0.5-0.8 c-0.1-0.2-0.4-0.3-0.6-0.4c-0.3-0.1-0.6-0.2-1-0.2c-0.4,0-0.8,0.1-1.1,0.2s-0.6,0.3-0.8,0.6s-0.4,0.6-0.5,1 c-0.1,0.4-0.2,0.8-0.2,1.3C29.7,37,29.9,37.8,30.4,38.3z M39,30H9V6c0-1.7,1.3-3,3-3h16.5v6c0,2.5,2,4.5,4.5,4.5h6V30z"/></svg>';
             var pngIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 48 48"><path d="M28.9,18.4l-3.4,3.4V10.5C25.5,9.7,24.8,9,24,9s-1.5,0.7-1.5,1.5v11.4l-3.4-3.4c-0.6-0.6-1.5-0.6-2.1,0 c-0.6,0.6-0.6,1.5,0,2.1l6,6c0.6,0.6,1.5,0.6,2.1,0c0,0,0,0,0,0l6-6c0.6-0.6,0.6-1.5,0-2.1C30.5,17.9,29.5,17.9,28.9,18.4z"/><path d="M42,30V13.5L28.5,0H12C8.7,0,6,2.7,6,6v24c-1.7,0.1-3,1.4-3,3.1v5.8c0,1.7,1.3,3,3,3.1v0c0,3.3,2.7,6,6,6h24 c3.3,0,6-2.7,6-6v0c1.7-0.1,3-1.4,3-3.1v-5.8C45,31.4,43.7,30.1,42,30z M36,45H12c-1.7,0-3-1.3-3-3h30C39,43.7,37.7,45,36,45z M11.5,39.3v-6.6c0-0.4,0.1-0.7,0.3-0.8s0.5-0.2,0.8-0.2h2.2c0.7,0,1.2,0.1,1.5,0.2c0.4,0.1,0.7,0.3,0.9,0.5s0.4,0.5,0.6,0.8 s0.2,0.7,0.2,1.1c0,0.9-0.3,1.5-0.8,2s-1.3,0.7-2.4,0.7h-1.6v2.4c0,0.3-0.1,0.6-0.2,0.8s-0.4,0.3-0.6,0.3c-0.3,0-0.5-0.1-0.6-0.3 S11.5,39.6,11.5,39.3z M19.5,39.3v-6.6c0-0.3,0-0.5,0.1-0.7c0.1-0.2,0.2-0.3,0.4-0.4s0.4-0.2,0.6-0.2c0.2,0,0.3,0,0.4,0.1 s0.2,0.1,0.3,0.2s0.2,0.2,0.3,0.3s0.2,0.3,0.3,0.4l3.3,5.1v-5.1c0-0.3,0.1-0.6,0.2-0.7s0.3-0.2,0.6-0.2c0.3,0,0.4,0.1,0.6,0.2 s0.2,0.4,0.2,0.7v6.8c0,0.8-0.3,1.1-0.9,1.1c-0.2,0-0.3,0-0.4-0.1s-0.2-0.1-0.4-0.2s-0.2-0.2-0.3-0.3s-0.2-0.3-0.3-0.4l-3.3-5v5 c0,0.3-0.1,0.6-0.2,0.7s-0.3,0.3-0.6,0.3c-0.2,0-0.4-0.1-0.6-0.3S19.5,39.7,19.5,39.3z M30.7,38.2c0.5,0.5,1.1,0.8,1.9,0.8 c0.4,0,0.8-0.1,1.1-0.2s0.7-0.3,1.1-0.5V37h-1.3c-0.3,0-0.6,0-0.7-0.1s-0.2-0.3-0.2-0.5c0-0.2,0.1-0.4,0.2-0.5s0.3-0.2,0.6-0.2h2 c0.2,0,0.4,0,0.6,0.1s0.3,0.1,0.4,0.3s0.2,0.4,0.2,0.7v1.6c0,0.2,0,0.4-0.1,0.5s-0.1,0.2-0.2,0.4s-0.3,0.2-0.4,0.3 c-0.5,0.3-1,0.5-1.5,0.6s-1,0.2-1.6,0.2c-0.7,0-1.3-0.1-1.8-0.3s-1-0.5-1.4-0.9s-0.7-0.9-0.9-1.4s-0.3-1.2-0.3-1.8 c0-0.7,0.1-1.3,0.3-1.8s0.5-1,0.9-1.4s0.9-0.7,1.4-0.9s1.2-0.3,1.9-0.3c0.6,0,1.1,0.1,1.5,0.2s0.8,0.3,1.1,0.6s0.5,0.5,0.6,0.7 s0.2,0.5,0.2,0.7c0,0.2-0.1,0.4-0.2,0.6s-0.4,0.2-0.6,0.2c-0.1,0-0.2,0-0.4-0.1s-0.2-0.1-0.3-0.2c-0.2-0.3-0.4-0.6-0.5-0.8 s-0.3-0.3-0.6-0.4s-0.6-0.2-1-0.2c-0.4,0-0.8,0.1-1.1,0.2s-0.6,0.3-0.8,0.6s-0.4,0.6-0.5,1S30,35.4,30,35.9 C30,36.9,30.3,37.6,30.7,38.2z M39,30H9V6c0-1.7,1.3-3,3-3h16.5v6c0,2.5,2,4.5,4.5,4.5h6V30z"/><path d="M15.5,35.4c0.3-0.1,0.5-0.2,0.6-0.4s0.2-0.5,0.2-0.8c0-0.4-0.1-0.7-0.3-0.9c-0.3-0.3-0.8-0.4-1.5-0.4h-1.2v2.6h1.2 C14.8,35.5,15.2,35.5,15.5,35.4z"/></svg>';
+            var pdfIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 48 48"><path d="M28.9,18.4l-3.4,3.4V10.5C25.5,9.7,24.8,9,24,9s-1.5,0.7-1.5,1.5v11.4l-3.4-3.4c-0.6-0.6-1.5-0.6-2.1,0 c-0.6,0.6-0.6,1.5,0,2.1l6,6c0.6,0.6,1.5,0.6,2.1,0l6-6c0.6-0.6,0.6-1.5,0-2.1C30.5,17.9,29.5,17.9,28.9,18.4z"/><path d="M24.6,39c0.2,0,0.3-0.1,0.5-0.1c0.2-0.1,0.3-0.2,0.5-0.3c0.6-0.5,0.9-1.4,0.9-2.6c0-0.9-0.1-1.5-0.4-2 c-0.3-0.4-0.6-0.7-1-0.8C24.8,33,24.3,33,23.8,33h-1.2v6h1.4C24.2,39,24.5,39,24.6,39z"/><path d="M42,30V13.5L28.5,0H12C8.7,0,6,2.7,6,6v24c-1.7,0.1-3,1.4-3,3.1v5.8c0,1.7,1.3,3,3,3.1c0,3.3,2.7,6,6,6h24c3.3,0,6-2.7,6-6 c1.7-0.1,3-1.4,3-3.1v-5.8C45,31.4,43.7,30.1,42,30z M36,45H12c-1.7,0-3-1.3-3-3h30C39,43.7,37.7,45,36,45z M12.5,39.5v-6.8 c0-0.4,0.1-0.7,0.3-0.8c0.2-0.2,0.5-0.3,0.9-0.3H16c0.7,0,1.2,0.1,1.6,0.2c0.4,0.1,0.7,0.3,0.9,0.5c0.3,0.2,0.5,0.5,0.6,0.9 c0.1,0.3,0.2,0.7,0.2,1.1c0,0.9-0.3,1.6-0.8,2C17.9,36.7,17.1,37,16,37h-1.6v2.5c0,0.4-0.1,0.6-0.3,0.8c-0.2,0.2-0.4,0.3-0.6,0.3 c-0.3,0-0.5-0.1-0.7-0.3C12.6,40.1,12.5,39.8,12.5,39.5z M20.8,39.1v-6.5c0-0.4,0.1-0.7,0.3-0.8c0.2-0.2,0.5-0.3,0.8-0.3h2.3 c0.6,0,1.1,0.1,1.6,0.2c0.4,0.1,0.8,0.3,1.2,0.6c0.9,0.8,1.4,2,1.4,3.6c0,0.5,0,1-0.1,1.5c-0.1,0.4-0.2,0.8-0.4,1.2 c-0.2,0.4-0.4,0.7-0.7,0.9c-0.2,0.2-0.5,0.4-0.8,0.5c-0.3,0.1-0.6,0.2-0.9,0.3s-0.7,0.1-1.1,0.1h-2.3c-0.3,0-0.6-0.1-0.7-0.1 c-0.2-0.1-0.3-0.2-0.3-0.4C20.8,39.7,20.8,39.4,20.8,39.1z M34.6,35.2c0.3,0,0.5,0.1,0.6,0.2c0.1,0.1,0.2,0.3,0.2,0.5 c0,0.2-0.1,0.4-0.2,0.5c-0.1,0.1-0.3,0.2-0.6,0.2h-2.9v2.9c0,0.4-0.1,0.6-0.2,0.8s-0.4,0.3-0.6,0.3s-0.5-0.1-0.6-0.3 c-0.2-0.2-0.2-0.5-0.2-0.8v-6.8c0-0.3,0-0.5,0.1-0.6s0.2-0.3,0.4-0.4s0.4-0.1,0.6-0.1h4.2c0.3,0,0.5,0.1,0.6,0.2 C36,31.9,36,32,36,32.2c0,0.2-0.1,0.4-0.2,0.5c-0.1,0.1-0.4,0.2-0.6,0.2h-3.5v2.3H34.6z M39,30H9V6c0-1.7,1.3-3,3-3h16.5v6 c0,2.5,2,4.5,4.5,4.5h6V30z"/><path d="M16.6,35.5c0.3-0.1,0.5-0.2,0.6-0.4c0.2-0.2,0.2-0.5,0.2-0.8c0-0.4-0.1-0.7-0.3-1c-0.3-0.3-0.8-0.4-1.6-0.4h-1.2v2.7h1.2 C16,35.6,16.3,35.6,16.6,35.5z"/></svg>';
             var printIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16"><path d="M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z"/><path d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2H5zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4V3zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2H5zm7 2v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1z"/></svg>';
             var loadIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" class="icon-spin"><path d="M0 11c.511-6.158 5.685-11 12-11s11.489 4.842 12 11h-2.009c-.506-5.046-4.793-9-9.991-9s-9.485 3.954-9.991 9h-2.009zm21.991 2c-.506 5.046-4.793 9-9.991 9s-9.485-3.954-9.991-9h-2.009c.511 6.158 5.685 11 12 11s11.489-4.842 12-11h-2.009z"/></svg>';
             // default options
@@ -68,6 +69,7 @@
                 tabs = obj.find('a[data-toggle="tab"]');
                 section = $("#getsec").val();
                 relative = obj.find('#qrcdr-relative').val();
+                slider = obj.find('.qrcdr-slider-input');
 
                 isSvg = 'no';
 
@@ -97,9 +99,29 @@
                 // init alert
                 $('.toast').toast();
 
-                // Colorpicker
-                qrcolorpicker.colorpicker({
-                    autoInputFallback: false
+                function updateSliiderVal(theslider, thisval){
+                    theslider.parent('.qrcdr-slider').find('.qrcdr-slider-value').html(thisval + '%');
+                }
+
+                slider.each(function() {
+                    var thisval = $(this).val();
+                    updateSliiderVal($(this), thisval);
+                });
+                slider.on('input', function(){
+                    var thisval = $(this).val();
+                    updateSliiderVal($(this), thisval);
+                });
+
+                qrcolorpicker.spectrum({
+                    type: "text",
+                    // type: "component",
+                    showPalette: false,
+                    showAlpha: false,
+                    showButtons: false,
+                    allowEmpty: false,
+                    preferredFormat: "hex",
+                    change: triggerInput
+                    //move: triggerInput
                 });
 
                 // Custom Collpase
@@ -132,18 +154,20 @@
                 // Transparent background
                 transparent_bg.on('change', function(){
                     if ($(this).prop('checked')) {
-                        colorpickerback.colorpicker('setValue', 'transparent');
-                        colorpickerback.colorpicker('disable');
+                        colorpickerback.spectrum('set', 'transparent');
+                        colorpickerback.spectrum('disable');
                     } else {
-                        colorpickerback.colorpicker('enable');
+                        colorpickerback.spectrum('set', '#ffffff');
+                        colorpickerback.spectrum('enable');
                     }
                 });
 
                 if (transparent_bg.prop('checked')) {
-                    colorpickerback.colorpicker('setValue', 'transparent');
-                    colorpickerback.colorpicker('disable')
+                    colorpickerback.spectrum('set', 'transparent');
+                    colorpickerback.spectrum('disable');
                 } else {
-                    colorpickerback.colorpicker('enable');
+                    colorpickerback.spectrum('set', '#ffffff');
+                    colorpickerback.spectrum('enable');
                 }
 
                 /*
@@ -167,15 +191,14 @@
                     
                     generate_qrcode_btn.attr('disabled', true);
                     linksholder.html('');
-
+                    resultholder.data('gradient', false);
                     timer = setTimeout(function(){
 
                         if (!$myForm[0].checkValidity()) {
                             submitform.click();
                         }
 
-                        colorpickerback.colorpicker('enable');
-
+                        colorpickerback.spectrum('enable');
                         preloader.fadeIn(100, function(){
 
                             var sendIputs = obj.find(section + ' :input');
@@ -202,7 +225,7 @@
                             })
                             .done(function(msg) {
                                 if (transparent_bg.prop('checked')) {
-                                    colorpickerback.colorpicker('disable');
+                                    colorpickerback.spectrum('disable');
                                 }
                                 var result = JSON.parse(msg);
                                 if (result.hasOwnProperty('errore')) {                                    
@@ -213,6 +236,7 @@
                                 } else {
                                     generate_qrcode_btn.attr('disabled', false);
                                     resultholder.html(result.content);
+                                    resultholder.data('gradient', result.gradient);
                                     preloader.fadeOut('slow');
                                     holdresult.val(msg);
                                 }
@@ -313,6 +337,10 @@
 
                                 var downloadlinks = '<button class="btn btn-default svgtopng" data-path="'+filepath+'">'+pngIcon+'</button><a href="#" class="btn btn-default d-none preload-png">'+loadIcon+'</a><a class="serve-png d-none" href="'+filepath+'.png" download="'+getdata.basename+'.png" data-path="'+filepath+'">PNG</a>';
                                 downloadlinks = downloadlinks + '<a class="btn btn-default serve-svg" href="'+filepath+'.svg" download="'+getdata.basename+'.svg">'+svgIcon+'</a>';
+                                if (! resultholder.data('gradient')) {
+                                    downloadlinks = downloadlinks + '<a target="_blank" class="btn btn-default" href="'+relative+'pdf/get.php?file='+filepath+'">'+pdfIcon+'</a>';
+                                }
+
                                 downloadlinks = downloadlinks + '<button class="btn btn-default print">'+printIcon+'</button>';
 
                                 linksholder.html(downloadlinks);

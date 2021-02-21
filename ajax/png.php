@@ -17,6 +17,8 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH'])
 ) {
     exit;
 }
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require dirname(dirname(__FILE__)).'/config.php';
 
 $imgdata = filter_input(INPUT_POST, 'imgdata', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -32,9 +34,13 @@ if ($imgdata && $filename) {
 
         if (!file_exists($savedir.$filename)) {
             $content = file_get_contents($imgdata);
+            if (!$content) {
+                exit('error');
+            }
             file_put_contents($savedir.$filename, $content);
         }
         echo $maindir.$filename;
+        exit;
     }
     exit('error');
 }
