@@ -1,5 +1,5 @@
 <nav class="navbar">
-    <div class="placeresult d-grid">
+    <div class="placeresult -grid">
         <div class="form-group text-center wrapresult">
             <div class="resultholder bg-light">
                 <img class="img-fluid" src="<?php echo $relative.qrcdr()->getConfig('placeholder'); ?>" />

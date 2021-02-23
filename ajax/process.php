@@ -76,7 +76,7 @@ $outerframe = filter_input(INPUT_POST, "outer_frame", FILTER_SANITIZE_STRING);
 
 $custom_frame_color = isset($_POST['custom_frame_color']);
 $framecolor = filter_input(INPUT_POST, "framecolor", FILTER_SANITIZE_STRING);
-$framelabel = filter_input(INPUT_POST, "framelabel", FILTER_SANITIZE_STRING);
+$framelabel = filter_input(INPUT_POST, "framelabel", FILTER_SANITIZE_FULL_SPECIAL_CHARS, FILTER_FLAG_NO_ENCODE_QUOTES);
 $label_font = filter_input(INPUT_POST, "label_font", FILTER_SANITIZE_STRING);
 $logo_size = filter_input(INPUT_POST, "logo-size", FILTER_SANITIZE_STRING);
 $label_text_size = filter_input(INPUT_POST, "label-text-size", FILTER_SANITIZE_STRING);

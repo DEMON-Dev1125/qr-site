@@ -12,10 +12,6 @@
                 </form>
             </div><!-- col md-4-->
 
-            <div class="left__arrow">
-                <img src="<?php echo $relative; ?>svg/icons/arrow.svg" alt="" />
-            </div>
-
             <div class="content__left col-lg-8 pt-3">
                 <div class="row">
                     <form role="form" class="qrcdr-form needs-validation w-100" novalidate>
@@ -48,7 +44,6 @@
                                 require dirname(__FILE__).'/tab-bitcoin.php';
                                 ?>
                                 </div> <!-- tab content -->
-
                                 </div><!-- main-col open at tabnav -->
                             </div> <!-- row -->
                         </div><!-- col sm12-->
@@ -57,9 +52,8 @@
             </div><!-- col-lg-8 -->
 
         </div><!-- row -->
-    </div>
+    </div><!-- container -->
 </div>
-</div><!-- container -->
 <div class="alert_placeholder toast" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="false">
     <div class="toast-header">
         <div class="mr-auto">
@@ -68,7 +62,7 @@
               <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
             </svg>
         </div>
-        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+        <button type="button" class="ml-2 ms-auto mb-1 btn-close close" data-dismiss="toast" aria-label="Close">
           <span aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg></span>
         </button>
     </div>

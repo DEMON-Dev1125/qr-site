@@ -586,3 +586,14 @@ input:checked + .slider:before {
     padding-right: 10px !important;
   }
 }
+
+.contact__card {
+  background-color: #ffffff45;
+}
+.contact__title {
+  font-size: 26px;
+  color: #1c99dd;
+}
+.contact__detail {
+  font-size: 16px;
+}

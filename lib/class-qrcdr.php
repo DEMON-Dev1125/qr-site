@@ -235,6 +235,7 @@ class QRvct extends QRvect
         $frametranslate = '';
         $backgroundsize = $realimgW;
         $backgroundmargin = 0;
+        $framelabelpos = 'bottom';
 
         if ($setframe) {
 
@@ -258,11 +259,9 @@ class QRvct extends QRvect
             $backgroundsize = ($realimgW - $frameborder * 2 * $frameunit)*1.01;
 
             $frametranslate = $framelabelpos == 'top' ? ' transform="translate(0,'.$framediff.')"' : '';
-            $texttranslate = $framelabelpos == 'bottom' ? ' transform="translate(0,'.($realimgW-$frameunit+$offset).')"' : '';
 
-            $textpathy = $framelabelpos == 'bottom' ? ($realimgW-$frameunit+$offset) : 0;
             $textmaxw = $realimgW - $frameunit*2;
-            $textmaxh = $spacerH+$frameunit;
+            $textmaxh = $spacerH + $frameunit;
 
             $backgroundmargin = $frameunit*$frameborder;
             $labeltext_color = isset($style['labeltext_color']) ? $style['labeltext_color'] : '#ffffff';
@@ -450,7 +449,7 @@ class QRvct extends QRvect
 
             include dirname(__FILE__).'/EasySVG.php';
 
-            $text = $framelabel;
+            $text = htmlspecialchars_decode($framelabel);
             $svg = new EasySVG();
             // $svg->setFontSVG(dirname(__FILE__).'/fonts/'.$label_font);
             // $svg->setFontSize(100);
@@ -461,14 +460,15 @@ class QRvct extends QRvect
 
             // set width/height according to text.
             list($textWidth, $textHeight) = $svg->textDimensions($text);
-
+            
             $textXscale = $qrcodeW / $textWidth;
             $textYscale = $textmaxh / $textHeight;
-
             $textscale = min($textXscale, $textYscale)*$label_scale;
-
             $textoffX = $textmaxw/2 - ($textWidth*$textscale)/2 + $frameunit;
-            $textoffY = ($textmaxh - $frameunit/2)/2 - ($textHeight*$textscale)/2;
+            $textoffY = $textmaxh/2 - ($textHeight*$textscale)/2;
+
+            $textpathy = $framelabelpos == 'bottom' ? $realimgW+$offset-($textHeight/3*$textscale) : 0;
+            $textpathy = $framelabelpos == 'top' && $textscale < 0.5 ? $textscale*$frameunit : $textpathy;
 
             $output .= '<g transform="translate('.$textoffX.','.($textpathy+$textoffY).') scale('.$textscale.')">'. $svg->asPath() .'</g>';
         }
@@ -493,7 +493,7 @@ class QRvct extends QRvect
 
             if ($base64) {
                 $watermark_pos = $realimgW/2 - $watermark_size/2;
-                $watermark_pos_y = $watermark_pos + $framediff;
+                $watermark_pos_y = $setframe && $framelabelpos == 'top' ? $watermark_pos + $framediff : $watermark_pos;
                 $output .= '<image xlink:href="'.$base64.'" width="'.$watermark_size.'" height="'.$watermark_size.'" x="'.$watermark_pos.'" y="'.$watermark_pos_y.'"/>'."\n";
             }
         }

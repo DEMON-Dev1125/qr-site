@@ -365,3 +365,7 @@ h1{
   background: #0083FD;
   cursor: pointer;
 }
+.input-group > .sp-colorize-container{
+    flex: 1 1 auto;
+    width: 1%;
+}

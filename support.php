@@ -10,10 +10,10 @@
  * @author    Nicola Franchini <info@veno.it>
  * @copyright 2015-2021 Nicola Franchini
  * @license   item sold on codecanyon https://codecanyon.net/item/qrcdr-responsive-qr-code-generator/9226839
- * @version   5.1.7
+ * @version   5.2.1
  * @link      http://veno.es/qrcdr/
  */
-$version = '5.1.7';
+$version = '5.2.1';
 
 if (version_compare(phpversion(), '5.4', '<')) {
     exit("QRcdr requires at least PHP version 5.4.");
@@ -64,12 +64,33 @@ require dirname(__FILE__).'/'.$relative.'include/head.php';
     ?>
 
     <div class="container" style="margin-top: 100px;">
-        <p>
-            We are always happy to hear from our clients and visitors, you may contact us anytime
-        </p>
-        <p class="email">
-            <a href=""><i class="fa fa-envelope-o"></i> : support@octopus.com</a>
-        </p>
+        <div class="container-fluid">
+            <div class="row contact__card p-3">
+            <div class="col-md-12 multi-horizontal contact__title font-weight-bold pb-2">Contact Us</div>
+            <div class="col-md-12 multi-horizontal contact__detail pb-3">
+                We are happy to hear from you. Do you have suggestions or questions? Please leave your message.
+            </div>
+            <div class="col-md-12 multi-horizontal pb-2" data-for="name">
+                <input type="text" class="form-control input" name="name" data-form-field="Name"
+                placeholder="Your Name" required="" id="name-form4-2y">
+            </div>
+            <div class="col-md-12 multi-horizontal pb-2" data-for="phone">
+                <input type="text" class="form-control input" name="phone" data-form-field="Phone" placeholder="Phone"
+                required="" id="phone-form4-2y">
+            </div>
+            <div class="col-md-12 pb-2" data-for="email">
+                <input type="text" class="form-control input" name="email" data-form-field="Email" placeholder="Email"
+                required="" id="email-form4-2y">
+            </div>
+            <div class="col-md-12 pb-2" data-for="message">
+                <textarea class="form-control input" name="message" rows="3" data-form-field="Message"
+                placeholder="Message" style="resize:none" id="message-form4-2y"></textarea>
+            </div>
+            <div class="input-group-btn col-md-12 mt-4">
+                <button href="" type="submit" class="btn btn-primary btn-form display-4">Send Message</button>
+            </div>
+            </div>
+        </div>
     </div>
 
     <div class="container mb-5 fixed-bottom">

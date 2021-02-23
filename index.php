@@ -10,10 +10,10 @@
  * @author    Nicola Franchini <info@veno.it>
  * @copyright 2015-2021 Nicola Franchini
  * @license   item sold on codecanyon https://codecanyon.net/item/qrcdr-responsive-qr-code-generator/9226839
- * @version   5.2.0
+ * @version   5.2.1
  * @link      http://veno.es/qrcdr/
  */
-$version = '5.2.0';
+$version = '5.2.1';
 
 if (version_compare(phpversion(), '5.4', '<')) {
     exit("QRcdr requires at least PHP version 5.4.");
@@ -47,7 +47,6 @@ require dirname(__FILE__).'/'.$relative.'include/head.php';
         <link href="<?php echo $relative; ?>bootstrap/<?php echo $rtl['css']; ?>/bootstrap.min.css" rel="stylesheet">
         <link href="<?php echo $relative; ?>css/font-awesome.min.css" rel="stylesheet">
         <script src="<?php echo $relative; ?>js/jquery-3.5.1.min.js"></script>
-        <script src="<?php echo $relative; ?>bootstrap/js/bootstrap.min.js"></script>
         <link href="<?php echo $relative; ?>css/header.css" rel="stylesheet">
         <link href="<?php echo $relative; ?>css/style.css" rel="stylesheet">
         <link href="<?php echo $relative; ?>css/footer.css" rel="stylesheet">
@@ -57,7 +56,6 @@ require dirname(__FILE__).'/'.$relative.'include/head.php';
         qrcdr()->loadPluginsCss();
         qrcdr()->setMainColor(qrcdr()->getConfig('color_primary'));
         ?>
-        <script data-ad-client="ca-pub-5458702749841336" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
     </head>
     <body class="qrcdr">
         <?php

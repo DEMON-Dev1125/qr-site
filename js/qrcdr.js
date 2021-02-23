@@ -338,7 +338,7 @@
                                 var downloadlinks = '<button class="btn btn-default svgtopng" data-path="'+filepath+'">'+pngIcon+'</button><a href="#" class="btn btn-default d-none preload-png">'+loadIcon+'</a><a class="serve-png d-none" href="'+filepath+'.png" download="'+getdata.basename+'.png" data-path="'+filepath+'">PNG</a>';
                                 downloadlinks = downloadlinks + '<a class="btn btn-default serve-svg" href="'+filepath+'.svg" download="'+getdata.basename+'.svg">'+svgIcon+'</a>';
                                 if (! resultholder.data('gradient')) {
-                                    downloadlinks = downloadlinks + '<a target="_blank" class="btn btn-default" href="'+relative+'pdf/get.php?file='+filepath+'">'+pdfIcon+'</a>';
+                                    downloadlinks = downloadlinks + '<a target="_blank" class="btn btn-default" href="'+relative+'pdf/?f='+getdata.basename+'">'+pdfIcon+'</a>';
                                 }
 
                                 downloadlinks = downloadlinks + '<button class="btn btn-default print">'+printIcon+'</button>';

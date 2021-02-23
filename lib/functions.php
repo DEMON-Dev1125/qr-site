@@ -498,7 +498,7 @@ if (!class_exists('QRcdrFn', false)) {
             $maincolor = $this->getMainColor($primary);
 
             $maintext = '#F6F6F6';
-            $flagcolor = '#31a1d3';
+            $flag = '#31a1d3';
             $rgb = $this->HTMLToRGB($maincolor);
             $hsl = $this->RGBToHSL($rgb);
             $linkcolor = $maincolor;
@@ -514,7 +514,7 @@ if (!class_exists('QRcdrFn', false)) {
 
                 $output .= $this->setCss('a, .btn-link', array('color'=> $linkcolor));
                 $output .= $this->setCss('.text-primary', array('color'=> $maincolor.'!important'));
-                $output .= $this->setCss('.navbar-nav a, .navbar-nav .nav-link, .navbar-toggler', array('color'=> $flagcolor));
+                $output .= $this->setCss('.navbar-nav a, .navbar-nav .nav-link, .navbar-toggler', array('color'=> $flag));
                 $output .= $this->setCss(
                     'a:hover, a:active, a:focus, .btn-link:hover, .btn-link:active, .btn-link:focus, .dropdown-menu a.dropdown-item',
                     array(
