@@ -8,22 +8,22 @@
           generator and scanner app
         </div>
         <div class="header__button">
-          <a href="">
+          <a href="https://theqrreader.com">
             <img src="<?php echo $relative; ?>svg/buttons/app_store.svg" alt="" />
           </a>
-          <a href="">
+          <a href="https://theqrreader.com">
             <img src="<?php echo $relative; ?>svg/buttons/google_play.svg" alt="" />
           </a>
         </div>
         <div class="header__button__mobile container-fluid text-center">
           <div class="row">
             <div class="col-6">
-              <a href="">
+              <a href="https://theqrreader.com">
                 <img src="<?php echo $relative; ?>svg/buttons/app_store.svg" alt="" />
               </a>
             </div>
             <div class="col-6">
-              <a href="">
+              <a href="https://theqrreader.com">
                 <img src="<?php echo $relative; ?>svg/buttons/google_play.svg" alt="" />
               </a>
             </div>
